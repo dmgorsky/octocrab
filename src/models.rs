@@ -18,6 +18,7 @@ pub mod checks;
 pub mod classroom;
 pub mod code_scannings;
 pub mod commits;
+pub mod dependency_graph;
 pub mod events;
 pub mod gists;
 pub mod hooks;

@@ -6,6 +6,7 @@ pub mod classroom;
 pub mod code_scannings;
 pub mod commits;
 pub mod current;
+pub mod dependency_graph;
 pub mod events;
 pub mod gists;
 pub mod gitignore;
