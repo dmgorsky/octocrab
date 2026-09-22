@@ -1,4 +1,4 @@
-use serde_json::{json, Map, Value};
+use serde_json::{Map, Value, json};
 
 pub fn build_node_envelope(
     entity_id: &str,
@@ -18,10 +18,8 @@ pub fn build_node_envelope(
         meta["error"] = json!(err);
     }
 
-    if let Some(ref d) = data {
-        if let Some(arr) = d.as_array() {
-            meta["item_count"] = json!(arr.len());
-        }
+    if let Some(arr) = data.as_ref().and_then(|d| d.as_array()) {
+        meta["item_count"] = json!(arr.len());
     }
 
     let mut result = Map::new();

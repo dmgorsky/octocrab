@@ -219,12 +219,15 @@ fn copy_to_clipboard(text: &str) {
         tokio::spawn(async move {
             #[cfg(target_os = "macos")]
             {
+                use std::io::Write;
                 use std::process::{Command, Stdio};
-                if let Ok(mut child) = Command::new("pbcopy").stdin(Stdio::piped()).spawn() {
-                    if let Some(mut stdin) = child.stdin.take() {
-                        use std::io::Write;
-                        let _ = stdin.write_all(text_owned.as_bytes());
-                    }
+                if let Some(mut stdin) = Command::new("pbcopy")
+                    .stdin(Stdio::piped())
+                    .spawn()
+                    .ok()
+                    .and_then(|mut child| child.stdin.take())
+                {
+                    let _ = stdin.write_all(text_owned.as_bytes());
                 }
             }
         });

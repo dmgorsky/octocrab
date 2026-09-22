@@ -99,11 +99,7 @@ impl GithubClient {
         let _start = Instant::now();
         let client = reqwest::Client::new();
 
-        let clean_route = if route.starts_with('/') {
-            &route[1..]
-        } else {
-            route
-        };
+        let clean_route = route.strip_prefix('/').unwrap_or(route);
         let mut url = format!("https://api.github.com/{clean_route}");
 
         if !params.is_empty() {

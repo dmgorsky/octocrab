@@ -19,13 +19,11 @@ impl QueryNode {
             for field in entity.schema() {
                 match &field.field_type {
                     FieldType::String { placeholder } => {
-                        if !field.inheritable {
-                            if let Some(def) = placeholder {
-                                params.insert(
-                                    field.key.to_string(),
-                                    serde_json::Value::String(def.clone()),
-                                );
-                            }
+                        if let Some(def) = placeholder.as_ref().filter(|_| !field.inheritable) {
+                            params.insert(
+                                field.key.to_string(),
+                                serde_json::Value::String(def.clone()),
+                            );
                         }
                     }
                     FieldType::Integer { default, .. } => {
@@ -44,13 +42,11 @@ impl QueryNode {
                         params.insert(field.key.to_string(), serde_json::Value::String(val));
                     }
                     FieldType::Secret { placeholder } => {
-                        if !field.inheritable {
-                            if let Some(def) = placeholder {
-                                params.insert(
-                                    field.key.to_string(),
-                                    serde_json::Value::String(def.clone()),
-                                );
-                            }
+                        if let Some(def) = placeholder.as_ref().filter(|_| !field.inheritable) {
+                            params.insert(
+                                field.key.to_string(),
+                                serde_json::Value::String(def.clone()),
+                            );
                         }
                     }
                 }

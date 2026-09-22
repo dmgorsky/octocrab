@@ -53,9 +53,12 @@ fn indent(level: usize) -> String {
 }
 
 fn format_str_arg(val: &str) -> String {
-    if val.starts_with('&') || val.starts_with('"') {
-        val.to_string()
-    } else if val.contains("repo_item") || val.contains("pull_item") || val.contains("issue_item") {
+    if val.starts_with('&')
+        || val.starts_with('"')
+        || val.contains("repo_item")
+        || val.contains("pull_item")
+        || val.contains("issue_item")
+    {
         val.to_string()
     } else if val == "owner" || val == "repo_name" || val == "username" {
         format!("&{val}")
@@ -200,7 +203,6 @@ fn generate_node_code(
                 code.push_str(&format!(
                     "{ind}merged_result[\"{target_field}\"] = json!(org_repos_data);\n"
                 ));
-                return;
             }
         }
         "org_members" => {
@@ -358,7 +360,6 @@ fn generate_node_code(
                 code.push_str(&format!(
                     "{ind}merged_result[\"{target_field}\"] = json!(repo_issues_data);\n"
                 ));
-                return;
             }
         }
         "repo_pulls" => {
@@ -458,7 +459,6 @@ fn generate_node_code(
                 code.push_str(&format!(
                     "{ind}merged_result[\"{target_field}\"] = json!(repo_pulls_data);\n"
                 ));
-                return;
             }
         }
         "repo_commits" => {
@@ -583,7 +583,8 @@ fn generate_node_code(
             code.push_str(&format!(
                 "{ind}    .list_contributors()\n{ind}    .per_page({per_page})\n{ind}    .send()\n{ind}    .await?;\n"
             ));
-            let target_field = get_entity(&node.entity_id).map_or("contributors", |d| d.target_field());
+            let target_field =
+                get_entity(&node.entity_id).map_or("contributors", |d| d.target_field());
             code.push_str(&format!(
                 "{ind}merged_result[\"{target_field}\"] = json!(repo_contributors_data);\n"
             ));
@@ -600,10 +601,9 @@ fn generate_node_code(
             code.push_str(&format!(
                 "{ind}let repo_languages_data = octocrab.repos({owner_arg}, {repo_arg})\n"
             ));
-            code.push_str(&format!(
-                "{ind}    .list_languages()\n{ind}    .await?;\n"
-            ));
-            let target_field = get_entity(&node.entity_id).map_or("languages", |d| d.target_field());
+            code.push_str(&format!("{ind}    .list_languages()\n{ind}    .await?;\n"));
+            let target_field =
+                get_entity(&node.entity_id).map_or("languages", |d| d.target_field());
             code.push_str(&format!(
                 "{ind}merged_result[\"{target_field}\"] = json!(repo_languages_data);\n"
             ));
@@ -645,7 +645,8 @@ fn generate_node_code(
             code.push_str(&format!(
                 "{ind}    .list_milestones()\n{ind}    .per_page({per_page})\n{ind}    .send()\n{ind}    .await?;\n"
             ));
-            let target_field = get_entity(&node.entity_id).map_or("milestones", |d| d.target_field());
+            let target_field =
+                get_entity(&node.entity_id).map_or("milestones", |d| d.target_field());
             code.push_str(&format!(
                 "{ind}merged_result[\"{target_field}\"] = json!(repo_milestones_data);\n"
             ));
@@ -755,7 +756,6 @@ fn generate_node_code(
                 code.push_str(&format!(
                     "{ind}merged_result[\"{target_field}\"] = json!(user_repos_data);\n"
                 ));
-                return;
             }
         }
         "user_followers" => {
@@ -817,12 +817,8 @@ fn generate_node_code(
                 format!("\"{gist_id}\"")
             };
 
-            code.push_str(&format!(
-                "\n{ind}// Fetch comments for gist {gist_id}\n"
-            ));
-            code.push_str(&format!(
-                "{ind}let gist_comments_data = octocrab.gists()\n"
-            ));
+            code.push_str(&format!("\n{ind}// Fetch comments for gist {gist_id}\n"));
+            code.push_str(&format!("{ind}let gist_comments_data = octocrab.gists()\n"));
             code.push_str(&format!(
                 "{ind}    .comments_for({gist_id_arg})\n{ind}    .per_page({per_page})\n{ind}    .list_comments()\n{ind}    .await?;\n"
             ));
@@ -1030,7 +1026,6 @@ fn generate_node_code(
                     "{ind}let mut merged_result = json!({{ \"{}\": search_repos_data }});\n",
                     target_field
                 ));
-                return;
             }
         }
         "search_issues" => {

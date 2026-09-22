@@ -8,7 +8,7 @@ fn main() {
 
 #[component]
 fn App() -> Element {
-    let state = use_hook(|| AppState::new());
+    let state = use_hook(AppState::new);
 
     rsx! {
         // DaisyUI & Tailwind CDN
